@@ -8,6 +8,7 @@
   <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/duck.css">
 </head>
 
@@ -24,6 +25,35 @@
     <div class="game-menu">
       <button id="start-game">Start Game</button>
       <button id="record">Scores Record</button>
+    </div>
+  </div>
+
+  <div id="score-list" class="hidden">
+    <button id="close-score-list" class="close-button" aria-label="Close score list">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <h2>🔫 HIGH SCORES 🔫</h2>
+    <table id="score-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Score</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Scores will be populated here via JavaScript -->
+      </tbody>
+    </table>
+    <div class="hidden" id="no-scores">
+      <p>
+        No scores yet!
+      </p>
+    </div>
+    <div style="display: flex; justify-content: center; margin-top: 20px;">
+      <button id="clear-scores">
+        clear scores
+      </button>
     </div>
   </div>
 

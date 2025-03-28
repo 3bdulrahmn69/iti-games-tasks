@@ -5,12 +5,24 @@
   -webkit-user-drag: none;
 }
 
+:root {
+  --duck-color: #ffcc00;
+  --duck-shadow: rgba(0, 0, 0, 0.5);
+  --duck-eye-color: #000000;
+  --duck-beak-color: #ff9900;
+  --duck-body-color: #ffcc00;
+  --duck-wing-color: #ff9900;
+  --duck-foot-color: #ff9900;
+  --duck-eye-shadow: rgba(0, 0, 0, 0.3);
+}
+
 body {
   background: linear-gradient(180deg, #87ceeb 0%, #6bb5ff 100%);
   height: 100vh;
   margin: 0;
   overflow: hidden;
   position: relative;
+  cursor: url(../assets/images/crosshair.svg), auto !important;
 }
 
 .floating-clouds {
@@ -112,6 +124,7 @@ button {
   transition: all 0.1s ease;
   position: relative;
   margin: 10px 0;
+  cursor: pointer;
 }
 
 button:hover {
@@ -124,7 +137,8 @@ button:active {
   box-shadow: 0 3px 0 #4a2b0f;
 }
 
-#start-game {
+#start-game,
+#restart-game {
   background: #4ecdc4;
   text-shadow: 1px 1px 0 #000;
 }
@@ -190,4 +204,115 @@ button:active {
 
 #sound-controller button i {
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+}
+
+#score-list {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 70vh;
+  background: #1a1a1a;
+  border: 4px solid var(--duck-color);
+  box-shadow: 0 0 20px var(--duck-beak-color),
+    0 0 30px var(--duck-body-color) inset;
+  z-index: 1000;
+  padding: 20px;
+  font-family: 'Press Start 2P', cursive;
+  color: var(--duck-wing-color);
+  overflow: auto;
+  animation: crtFlicker 0.15s infinite;
+}
+
+#score-list::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+#score-list h2 {
+  color: #ff0000;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 2px 2px #000000;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  letter-spacing: 2px;
+  animation: blink 1s step-end infinite;
+}
+
+#score-list table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 2px solid var(--duck-color);
+}
+
+#score-list th,
+#score-list td {
+  padding: 12px;
+  border: 1px dashed var(--duck-color);
+  text-align: center;
+}
+
+#score-list th {
+  background: rgba(0, 255, 0, 0.1);
+  text-transform: uppercase;
+  font-size: 0.8em;
+}
+
+#score-list tr:nth-child(odd) {
+  background: rgba(0, 255, 0, 0.05);
+}
+
+#no-scores {
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+/* CRT Flicker Animation */
+@keyframes crtFlicker {
+  0% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.95;
+  }
+}
+
+/* Blink Animation */
+@keyframes blink {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Retro Scrollbar */
+#score-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+#score-list::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+#score-list::-webkit-scrollbar-thumb {
+  background: var(--duck-color);
+  border: 1px solid #000000;
 }
