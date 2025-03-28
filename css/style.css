@@ -1,0 +1,227 @@
+/* Add these styles */
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Press+Start+2P&display=swap');
+
+.arcade-theme {
+  background: linear-gradient(180deg, #87ceeb 0%, #6bb5ff 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: 'Bangers', cursive;
+}
+
+.sky-background {
+  position: relative;
+  padding: 2rem;
+}
+
+.floating-clouds {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cloud {
+  position: absolute;
+  border-radius: 20px;
+  animation: float 20s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes float {
+  0% {
+    transform: translateX(-100%) translateY(0);
+  }
+  100% {
+    transform: translateX(115vw) translateY(-20px);
+  }
+}
+
+.cloud-1 {
+  top: 10%;
+  left: -200px;
+  width: 100px;
+  height: 40px;
+}
+.cloud-2 {
+  top: 30%;
+  left: -300px;
+  width: 150px;
+  height: 60px;
+  animation-delay: -5s;
+}
+.cloud-3 {
+  top: 45%;
+  left: -250px;
+  width: 180px;
+  height: 70px;
+  animation-delay: -10s;
+}
+
+.arcade-title {
+  font-family: 'Press Start 2P', cursive;
+  color: #ffd700;
+  text-shadow: 4px 4px 0 #4a2b0f, -2px -2px 0 #fff, 3px 3px 0 #000;
+  font-size: 2.5rem;
+  text-align: center;
+  margin: 2rem 0;
+  animation: title-bounce 0.8s ease infinite alternate;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes title-bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10px);
+  }
+}
+
+.games-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.game-card {
+  perspective: 1000px;
+  aspect-ratio: 1;
+  transition: transform 0.3s ease;
+}
+
+.card-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.card-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 1rem;
+  transform-style: preserve-3d;
+}
+
+.game-thumbnail {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.pixel-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.glow-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.3) 0%,
+    transparent 60%
+  );
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.game-title {
+  position: absolute;
+  bottom: 64px;
+  font-size: 2rem;
+  color: #4a2b0f;
+  text-shadow: 2px 2px 0 #ffd700;
+  margin: 1rem 0;
+}
+
+.pixel-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #4a2b0f;
+  border-radius: 20px;
+  z-index: -1;
+}
+
+.game-card:hover .card-wrapper {
+  transform: translateY(-10px) rotateZ(2deg);
+}
+
+.arcade-footer {
+  position: relative;
+  margin-top: 4rem;
+  padding: 2rem 0;
+}
+
+.grass-border {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: url('data:image/svg+xml,<svg viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg"><path d="M0 10 Q 10 5 20 10 T 40 5 T 60 10 T 80 5 T 100 10 L 100 0 L 0 0" fill="%2348a6a7"/></svg>')
+    repeat-x;
+  animation: grass-wave 3s ease-in-out infinite;
+}
+
+@keyframes grass-wave {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.developer-badge {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: #4a2b0f;
+  color: #ffd700;
+  border-radius: 30px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transform: rotate(-3deg);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.developer-badge:hover {
+  transform: rotate(3deg) scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Boogaloo&display=swap');
+
+* {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+body {
+  background: linear-gradient(180deg, #87ceeb 0%, #6bb5ff 100%);
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.floating-clouds {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cloud {
+  position: absolute;
+  border-radius: 20px;
+  animation: float 20s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes float {
+  0% {
+    transform: translateX(-100%) translateY(0);
+  }
+  100% {
+    transform: translateX(115vw) translateY(-20px);
+  }
+}
+
+.cloud-1 {
+  top: 10%;
+  left: -200px;
+  width: 150px;
+  height: 60px;
+}
+.cloud-2 {
+  top: 30%;
+  left: -300px;
+  width: 200px;
+  height: 80px;
+  animation-delay: -5s;
+}
+.cloud-3 {
+  top: 45%;
+  left: -250px;
+  width: 180px;
+  height: 70px;
+  animation-delay: -10s;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Enhanced home screen */
+.home-screen {
+  background: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="%23FFD700" d="M45.2,-58.3C59.1,-50.3,71,-36.3,76.8,-19.4C82.6,-2.4,82.4,17.6,74.5,33.3C66.6,49,51.1,60.5,33.8,67.8C16.5,75.1,-2.5,78.3,-19.5,73.5C-36.5,68.8,-51.5,56.2,-61.5,40.7C-71.5,25.2,-76.4,6.8,-73.6,-10.3C-70.8,-27.4,-60.3,-43.2,-46.8,-51.5C-33.3,-59.8,-16.7,-60.5,0.3,-60.9C17.3,-61.3,34.6,-61.3,45.2,-58.3Z" transform="translate(100 100)" /></svg>');
+  background-size: cover;
+  border: 4px solid #4a2b0f;
+  border-radius: 0 0 20px 20px;
+  padding: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2),
+    inset 0 4px 8px rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+}
+
+.home-screen::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: linear-gradient(45deg, #ffd700, #ffb347);
+  z-index: -1;
+  border-radius: 25px;
+}
+
+.game-title h1 {
+  font-family: 'Bangers', cursive;
+  font-size: 3.5rem;
+  color: #4a2b0f;
+  text-shadow: 3px 3px 0 #ffd700, -1px -1px 0 #fff, 2px 2px 0 #000;
+  letter-spacing: 2px;
+  margin: 20px 0;
+}
+
+/* Enhanced buttons */
+button {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.8rem;
+  background: #ff6b6b;
+  border: 3px solid #4a2b0f;
+  border-radius: 15px;
+  padding: 15px 30px;
+  box-shadow: 0 5px 0 #4a2b0f, inset 0 4px 4px rgba(255, 255, 255, 0.3);
+  transition: all 0.1s ease;
+  position: relative;
+  margin: 10px 0;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 #4a2b0f, inset 0 4px 4px rgba(255, 255, 255, 0.3);
+}
+
+button:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 #4a2b0f;
+}
+
+#start-game {
+  background: #4ecdc4;
+  text-shadow: 1px 1px 0 #000;
+}
+
+/* Game screen enhancements */
+.game-screen {
+  background: linear-gradient(180deg, #87ceeb 0%, #6bb5ff 100%);
+  height: 100vh;
+  position: relative;
+}
+
+.game-options {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8px 30px;
+  border-radius: 0 0 20px 20px;
+  border-bottom: 4px solid #4a2b0f;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.details p {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.5rem;
+  color: #4a2b0f;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+#remain-tries {
+  color: #ff6b6b;
+  text-shadow: 1px 1px 0 #000;
+}
+
+/* Duck styling */
+.duck {
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.3));
+  transition: transform 0.2s ease;
+}
+
+.duck:hover {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+/* Game over screen */
+.game-over-screen h2 {
+  font-family: 'Bangers', cursive;
+  font-size: 4rem;
+  color: #ff6b6b;
+  text-shadow: 3px 3px 0 #4a2b0f;
+  margin-bottom: 20px;
+}
+
+/* Sound controller */
+#sound-controller button {
+  padding: 10px;
+  font-size: 1.5rem;
+  background: #ffd700;
+  border-color: #4a2b0f;
+}
+
+#sound-controller button i {
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+}

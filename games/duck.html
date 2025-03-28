@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duck Hunter</title>
+  <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/duck.css">
+</head>
+
+<body>
+  <div class="home-screen">
+    <div class="game-title">
+      <p class="back-arrow">
+        <a href="../index.html" title="Back to home">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+      </p>
+      <h1>Duck Hunter</h1>
+    </div>
+    <div class="game-menu">
+      <button id="start-game">Start Game</button>
+      <button id="record">Scores Record</button>
+    </div>
+  </div>
+
+  <div class="game-screen" style="display: none">
+    <div class="game-options">
+      <div class="details">
+        <p>Score: <span id="score">0</span></p>
+        <p id="remain-tries">❤️❤️❤️❤️❤️❤️</p>
+      </div>
+
+      <div class="settings">
+        <div id="sound-controller">
+          <button id="openSound" class="hidden" aria-label="Enable sound">
+            <i class="fa-solid fa-volume-xmark"></i>
+          </button>
+          <button id="closeSound" class="" aria-label="Mute sound">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sky-background">
+      <div class="floating-clouds">
+        <div class="cloud cloud-1">
+          <img src="../assets/images/cloud.png" alt="cloud">
+        </div>
+        <div class="cloud cloud-2">
+          <img src="../assets/images/cloud.png" alt="cloud">
+        </div>
+        <div class="cloud cloud-3">
+          <img src="../assets/images/cloud.png" alt="cloud">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-over-screen" style="display: none; text-align: center;">
+    <h2>Game Over!</h2>
+    <p>Your Score: <span id="final-score">0</span></p>
+    <button id="restart-game">Restart</button>
+    <button id="back-home">Back to Home</button>
+  </div>
+
+  <script src="../js/duck.js"></script>
+</body>
+
+</html>
