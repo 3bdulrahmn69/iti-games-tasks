@@ -19,7 +19,7 @@ window.addEventListener('load', function () {
   let needToSpeedUp = true;
 
   /* Game logic */
-  let NumberOfTries = 5;
+  let NumberOfTries = 999;
   let totalScore = 0;
   let duckSpeed = 0.2;
 
@@ -121,18 +121,15 @@ window.addEventListener('load', function () {
       duckExists = false;
       totalScore++;
       score.innerText = totalScore;
-    } else if (
-      e.target.parentElement.classList.contains('details') ||
-      e.target.parentElement.parentElement.classList.contains('settings')
-    ) {
-      return;
-    } else {
+    } else if (e.target.classList.contains('game-screen')) {
       if (isSoundOn) {
         emptyGunShotAudio.currentTime = 0;
         emptyGunShotAudio.play();
       }
       NumberOfTries--;
       updateHearts();
+    } else {
+      return;
     }
 
     if (NumberOfTries === 0) {
