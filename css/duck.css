@@ -22,7 +22,7 @@ body {
   margin: 0;
   overflow: hidden;
   position: relative;
-  cursor: url(../assets/images/crosshair.svg), auto !important;
+  cursor: url('../assets/images/cursor.cur'), auto !important;
 }
 
 .floating-clouds {
@@ -124,7 +124,7 @@ button {
   transition: all 0.1s ease;
   position: relative;
   margin: 10px 0;
-  cursor: pointer;
+  cursor: url('../assets/images/cursor.cur'), auto !important;
 }
 
 button:hover {
@@ -172,7 +172,6 @@ button:active {
   color: #ff6b6b;
   text-shadow: 1px 1px 0 #000;
 }
-
 /* Duck styling */
 .duck {
   width: 120px;

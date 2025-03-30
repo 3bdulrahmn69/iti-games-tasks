@@ -13,6 +13,10 @@ window.addEventListener('load', function () {
   emptyGunShotAudio.load();
   const wakAudio = new Audio('../assets/sounds/wak.mp3');
   wakAudio.load();
+  const gameOverAudio = new Audio('../assets/sounds/gameOver.mp3');
+  gameOverAudio.load();
+  const levelUpAudio = new Audio('../assets/sounds/levelUp.mp3');
+  levelUpAudio.load();
 
   let gameStatus = {
     isStarted: false,
@@ -61,6 +65,10 @@ window.addEventListener('load', function () {
         gameStatus.speedUp
       ) {
         gameStatus.duckSpeed += 0.05;
+        if (gameStatus.isSoundOn) {
+          levelUpAudio.currentTime = 0;
+          levelUpAudio.play();
+        }
         gameStatus.speedUp = false;
       } else {
         gameStatus.totalScore % 10 === 0
@@ -116,6 +124,36 @@ window.addEventListener('load', function () {
     initGame();
   }); // End of start-game event
 
+  const saveScore = (score) => {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const amPm = hours >= 12 ? 'PM' : 'AM';
+    const hours12 = hours % 12 || 12;
+
+    const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(
+      now.getMonth() + 1
+    ).padStart(2, '0')}/${now.getFullYear()} - ${String(hours12).padStart(
+      2,
+      '0'
+    )}:${String(minutes).padStart(2, '0')} ${amPm}`;
+
+    const storedScores = JSON.parse(
+      localStorage.getItem('duckGameScore') || '[]'
+    );
+
+    if (storedScores.some((entry) => entry.score === score)) return;
+
+    const gameScore = { score, date: formattedDate };
+    storedScores.push(gameScore);
+
+    const topScores = storedScores
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 10);
+
+    localStorage.setItem('duckGameScore', JSON.stringify(topScores));
+  };
+
   gameScreen.addEventListener('click', (e) => {
     if (e.target.classList.contains('duck')) {
       if (gameStatus.isSoundOn) {
@@ -139,42 +177,20 @@ window.addEventListener('load', function () {
 
     if (gameStatus.tries === 0) {
       gameStatus.isStarted = false;
-      gameScreen.style.display = 'none';
-      gameOverScreen.style.display = 'block';
-      document.querySelector('#final-score').innerText = gameStatus.totalScore;
+      if (gameStatus.isSoundOn) {
+        gameOverAudio.currentTime = 0;
+        gameOverAudio.play();
+      }
+
+      this.setTimeout(() => {
+        gameScreen.style.display = 'none';
+        gameOverScreen.style.display = 'block';
+        document.querySelector('#final-score').innerText =
+          gameStatus.totalScore;
+      }, 1000);
 
       if (gameStatus.totalScore > 0) {
-        const now = new Date();
-        const hours = now.getHours();
-        const minutes = now.getMinutes();
-        const amPm = hours >= 12 ? 'PM' : 'AM';
-        const hours12 = hours % 12 || 12; // Convert 0-23 to 12-hour format
-
-        const formattedDate = `${String(now.getDate()).padStart(
-          2,
-          '0'
-        )}/${String(now.getMonth() + 1).padStart(
-          2,
-          '0'
-        )}/${now.getFullYear()} - ${String(hours12).padStart(2, '0')}:${String(
-          minutes
-        ).padStart(2, '0')} ${amPm}`;
-
-        const gameScore = {
-          score: gameStatus.totalScore,
-          date: formattedDate,
-        };
-
-        const storedScores = JSON.parse(
-          localStorage.getItem('duckGameScore') || '[]'
-        );
-        storedScores.push(gameScore);
-
-        const topScores = storedScores
-          .sort((a, b) => b.score - a.score)
-          .slice(0, 10);
-
-        localStorage.setItem('duckGameScore', JSON.stringify(topScores));
+        saveScore(gameStatus.totalScore);
       }
     }
   }); // End of gameScreen click event
@@ -191,6 +207,13 @@ window.addEventListener('load', function () {
     document.getElementById('closeSound').classList.add('hidden');
   }); // End of sound toggle
 
+  document.getElementById('exit-game').addEventListener('click', () => {
+    document.querySelectorAll('.duck').forEach((duck) => duck.remove());
+    gameOverScreen.style.display = 'none';
+    homeScreen.style.display = 'block';
+    gameStatus.isStarted = false;
+  }); // End of sound toggle
+
   document.getElementById('restart-game').addEventListener('click', () => {
     document.querySelectorAll('.duck').forEach((duck) => duck.remove());
     gameOverScreen.style.display = 'none';
@@ -203,33 +226,35 @@ window.addEventListener('load', function () {
       localStorage.getItem('duckGameScore') || '[]'
     );
 
-    console.log('updating');
+    const table = document.getElementById('score-table');
+    const tbody = table.querySelector('tbody');
+    const clearButton = document.getElementById('clear-scores');
+    const noScoresMessage = document.getElementById('no-scores');
+
     if (storedScores.length === 0) {
-      document.getElementById('score-table').classList.add('hidden');
-      document.getElementById('clear-scores').classList.add('hidden');
-      document.getElementById('no-scores').classList.remove('hidden');
+      table.classList.add('hidden');
+      clearButton.classList.add('hidden');
+      noScoresMessage.classList.remove('hidden');
       return;
     }
 
-    storedScores.forEach((score) => {
-      console.log(score);
+    storedScores.sort((a, b) => b.score - a.score);
+    tbody.innerHTML = '';
+
+    storedScores.forEach((score, index) => {
       const tr = document.createElement('tr');
-      const tdRank = document.createElement('td');
-      const tdScore = document.createElement('td');
-      const tdDate = document.createElement('td');
-
-      tdRank.innerText = storedScores.indexOf(score) + 1;
-      tdScore.innerText = score.score;
-      tdDate.innerText = score.date;
-
-      tr.appendChild(tdRank);
-      tr.appendChild(tdScore);
-      tr.appendChild(tdDate);
-
-      document.querySelector('#score-table tbody').innerHTML = '';
-      document.querySelector('#score-table tbody').appendChild(tr);
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${score.score}</td>
+        <td>${score.date}</td>
+      `;
+      tbody.appendChild(tr);
     });
-  }; // End of updateTable
+
+    table.classList.remove('hidden');
+    clearButton.classList.remove('hidden');
+    noScoresMessage.classList.add('hidden');
+  };
 
   document.getElementById('record').addEventListener('click', () => {
     document.getElementById('score-list').classList.remove('hidden');
