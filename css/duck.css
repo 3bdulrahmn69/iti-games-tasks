@@ -113,7 +113,8 @@ body {
 }
 
 /* Enhanced buttons */
-button {
+button,
+#dev {
   font-family: 'Boogaloo', cursive;
   font-size: 1.8rem;
   background: #ff6b6b;
@@ -125,6 +126,7 @@ button {
   position: relative;
   margin: 10px 0;
   cursor: url('../assets/images/cursor.cur'), auto !important;
+  text-decoration: none;
 }
 
 button:hover {

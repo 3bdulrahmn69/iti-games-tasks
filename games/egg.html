@@ -37,6 +37,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="../css/egg.css">
@@ -81,6 +82,71 @@
       <a href="https://3bdulrahmn.vercel.app/" id="dev">Developer Info</a>
     </div>
   </div>
+
+  <div id="score-list" class="hidden">
+    <button id="close-score-list" class="close-button" aria-label="Close score list">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <h2>🔫 HIGH SCORES 🔫</h2>
+    <table id="score-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Score</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Scores will be populated here via JavaScript -->
+      </tbody>
+    </table>
+    <div class="hidden" id="no-scores">
+      <p>
+        No scores yet!
+      </p>
+    </div>
+    <div style="display: flex; justify-content: center; margin-top: 20px;">
+      <button id="clear-scores">
+        clear scores
+      </button>
+    </div>
+  </div>
+
+  <div class="game-screen hidden">
+    <div class="game-options">
+      <div class="details">
+        <p>Score: <span id="score">0</span></p>
+        <p id="remain-tries">❤️❤️❤️❤️❤️</p>
+      </div>
+
+      <div class="settings">
+        <div id="sound-controller">
+          <button id="openSound" class="hidden" aria-label="Enable sound">
+            <i class="fa-solid fa-volume-xmark"></i>
+          </button>
+          <button id="closeSound" class="" aria-label="Mute sound">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+          <button id="exit-game" aria-label="Exit game" style="background-color: #ff6b6b;">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="nest">
+      <img src="../assets/images/nest.png" alt="nest">
+    </div>
+  </div>
+
+  <div class="game-over-screen hidden">
+    <h2>Game Over!</h2>
+    <p>Your Score: <span id="final-score">0</span></p>
+    <button id="restart-game">Restart</button>
+    <button id="back-home">Back to Home</button>
+  </div>
+
+  <script src="../js/egg.js"></script>
 </body>
 
 </html>
