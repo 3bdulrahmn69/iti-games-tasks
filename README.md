@@ -3,7 +3,7 @@
 Welcome to **ITI Games Task**, a mini retro-themed game center built for the browser. This project includes two simple yet nostalgic games:
 
 ![Duck Game](assets/images/game-center-preview.png)
-🎮 **[Demo](https://3bdulrahmn69.github.io/iti-games-taks/)**
+🎮 **[Demo](https://3bdulrahmn69.github.io/iti-games-tasks/)**
 
 ## 🕹️ Included Games
 
@@ -14,7 +14,7 @@ Welcome to **ITI Games Task**, a mini retro-themed game center built for the bro
 
    - **How to Play**: Use the mouse to aim and click to shoot. Hit as many ducks as you can before time runs out!
 
-     🦆 **[Duck Game](https://3bdulrahmn69.github.io/iti-games-taks/games/duck.html)**
+     🦆 **[Duck Game](https://3bdulrahmn69.github.io/iti-games-tasks/games/duck.html)**
 
 2. **Egg Collector**  
    Move fast and catch as many falling eggs as you can without letting them break!
@@ -23,7 +23,7 @@ Welcome to **ITI Games Task**, a mini retro-themed game center built for the bro
 
    - **How to Play**: Use the arrow keys or mouse to move left and right. Catch the falling eggs in your basket, but avoid letting them hit the ground!
 
-   🥚 **[Egg Collector Game](https://3bdulrahmn69.github.io/iti-games-taks/games/egg.html)**
+   🥚 **[Egg Collector Game](https://3bdulrahmn69.github.io/iti-games-tasks/games/egg.html)**
 
 ## 🧑‍💻 Tech Stack
 
@@ -46,7 +46,13 @@ To play the games:
 1. Clone the repo
 
    ```bash
-   git clone https://github.com/3bdulrahmn69/iti-games-taks.git
+   git clone https://github.com/3bdulrahmn69/iti-games-tasks.git
+   ```
+
+   2. Clone the repo
+
+   ```bash
+   cd iti-games-tasks
    ```
 
 2. Open the `index.html` file in your web browser.
@@ -57,14 +63,6 @@ To play the games:
 
 3. Enjoy the games!
 
-## 📜 License
-
-This project is licensed under the MIT License. Feel free to use, modify, and distribute it as you wish.
-
-## 🤝 Contributing
-
-Contributions are welcome! If you have suggestions for improvements or new features, please open an issue or submit a pull request.
-
 ## 📧 Contact
 
 Created with 💻 by **Abdulrahman Moussa**
@@ -72,3 +70,11 @@ Created with 💻 by **Abdulrahman Moussa**
 - GitHub: [@3bdulrahmn69](https://github.com/3bdulrahmn69)
 - LinkedIn: [linkedin.com/in/3bdulrahmn69](https://linkedin.com/in/3bdulrahmn69)
 - Email: abdelrahmanmoussa111@gmail.com
+
+## 🤝 Contributing
+
+Contributions are welcome! If you have suggestions for improvements or new features, please open an issue or submit a pull request.
+
+## 📜 License
+
+This project is licensed under the MIT License. Feel free to use, modify, and distribute it as you wish.
