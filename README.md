@@ -14,7 +14,7 @@ Welcome to **ITI Games Task**, a mini retro-themed game center built for the bro
 
    - **How to Play**: Use the mouse to aim and click to shoot. Hit as many ducks as you can before time runs out!
 
-     🦆 **[Duck Game](https://3bdulrahmn69.github.io/iti-games-taks/duck.html)**
+     🦆 **[Duck Game](https://3bdulrahmn69.github.io/iti-games-taks/games/duck.html)**
 
 2. **Egg Collector**  
    Move fast and catch as many falling eggs as you can without letting them break!
@@ -23,7 +23,7 @@ Welcome to **ITI Games Task**, a mini retro-themed game center built for the bro
 
    - **How to Play**: Use the arrow keys or mouse to move left and right. Catch the falling eggs in your basket, but avoid letting them hit the ground!
 
-   🥚 **[Egg Collector Game](https://3bdulrahmn69.github.io/iti-games-taks/duck.html)**
+   🥚 **[Egg Collector Game](https://3bdulrahmn69.github.io/iti-games-taks/games/egg.html)**
 
 ## 🧑‍💻 Tech Stack
 
