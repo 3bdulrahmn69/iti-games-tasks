@@ -14,6 +14,8 @@ window.addEventListener('load', () => {
   missAudio.load();
   const gameOverAudio = new Audio('../assets/sounds/gameOverEgg.mp3');
   gameOverAudio.load();
+  const levelUpAudio = new Audio('../assets/sounds/levelUp.mp3');
+  levelUpAudio.load();
 
   let gameStatus = {
     isStarted: false,
@@ -21,10 +23,13 @@ window.addEventListener('load', () => {
     speedUp: true,
     tries: 5,
     totalScore: 0,
-    eggSpeed: 0.2,
+    eggSpeed: 0,
+    eggInterval: 1000,
     nestSpeed: 30,
     isUsingKeyboard: false,
   };
+
+  let eggSPownIntervalId = null;
 
   const updateHearts = () => {
     remainingTries.innerText = '❤️'.repeat(
@@ -40,7 +45,8 @@ window.addEventListener('load', () => {
     gameStatus.isStarted = true;
     gameStatus.tries = 5;
     gameStatus.totalScore = 0;
-    gameStatus.eggSpeed = 1;
+    gameStatus.eggSpeed = 5;
+    gameStatus.eggInterval = 1000;
     gameStatus.nestSpeed = 30;
     updateHearts();
     score.innerText = gameStatus.totalScore;
@@ -117,7 +123,6 @@ window.addEventListener('load', () => {
         gameScreen.removeChild(crackedEggElement);
       }
     }, 2000);
-    console.log('Cracked egg added:', crackedEggElement);
   };
 
   const moveEgg = (eggElement) => {
@@ -198,11 +203,11 @@ window.addEventListener('load', () => {
   };
 
   // Spawn an egg every second
-  setInterval(() => {
+  eggSPownIntervalId = setInterval(() => {
     if (gameStatus.isStarted) {
       spawnEgg();
     }
-  }, 1000);
+  }, gameStatus.eggInterval);
 
   document.querySelector('#start').addEventListener('click', () => {
     homeScreen.classList.add('hidden');
@@ -269,11 +274,35 @@ window.addEventListener('load', () => {
           // Collision detected!
           gameStatus.totalScore += 1;
           if (gameStatus.isSoundOn) {
-            catchAudio.currentTime = 0; // Reset audio to start
+            catchAudio.currentTime = 0;
             catchAudio.play();
           }
           score.innerText = gameStatus.totalScore;
-          gameStatus.eggSpeed = Math.max(1, gameStatus.eggSpeed - 0.1);
+          if (gameStatus.totalScore % 10 === 0 && gameStatus.totalScore !== 0) {
+            if (gameStatus.isSoundOn) {
+              levelUpAudio.currentTime = 0;
+              levelUpAudio.play();
+            }
+
+            if (gameStatus.eggSpeed > 1) {
+              gameStatus.eggSpeed -= 0.5;
+              console.log('Egg speed increased:', gameStatus.eggSpeed);
+            } else if (gameStatus.eggSpeed > 0.5) {
+              gameStatus.eggSpeed -= 0.2;
+            } else {
+              gameStatus.eggSpeed = 0.5;
+              if (gameStatus.eggInterval > 300) {
+                console.log('Egg interval decreased:', gameStatus.eggInterval);
+                gameStatus.eggInterval -= 100;
+                clearInterval(eggSPownIntervalId);
+                eggSPownIntervalId = setInterval(() => {
+                  if (gameStatus.isStarted) {
+                    spawnEgg();
+                  }
+                }, gameStatus.eggInterval);
+              }
+            }
+          }
 
           // Remove egg from DOM
           gameScreen.removeChild(egg);
