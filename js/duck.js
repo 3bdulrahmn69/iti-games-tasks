@@ -2,7 +2,6 @@ window.addEventListener('load', function () {
   /* Selecting elements */
   const homeScreen = document.querySelector('.home-screen');
   const gameScreen = document.querySelector('.game-screen');
-  const remainingTries = document.querySelector('#remain-tries');
   const score = document.querySelector('#score');
   const gameOverScreen = document.querySelector('.game-over-screen');
 
@@ -19,6 +18,7 @@ window.addEventListener('load', function () {
   levelUpAudio.load();
 
   let gameStatus = {
+    gameName: 'duckHunt',
     isStarted: false,
     isSoundOn: true,
     speedUp: true,
@@ -26,31 +26,17 @@ window.addEventListener('load', function () {
     totalScore: 0,
     duckSpeed: 0.2,
     sound: gunshotAudio,
+    isInfinite: false,
   };
-
-  const updateHearts = () => {
-    remainingTries.innerText = '❤️'.repeat(
-      gameStatus.tries > 10 ? 10 : gameStatus.tries
-    );
-    if (gameStatus.tries >= 999) {
-      gameStatus.tries = 9999;
-      remainingTries.innerHTML = '<i class="fa-solid fa-infinity"></i>';
-    }
-  }; // End of updateHearts
 
   const initGame = () => {
     gameStatus.tries = 5;
     gameStatus.duckSpeed = 0.2;
     gameStatus.totalScore = 0;
-    updateHearts();
+    updateHearts(gameStatus);
     score.innerText = gameStatus.totalScore;
     gameStatus.isStarted = true;
   }; // End of initGame
-
-  const randomStartPosition = () => ({
-    x: Math.random() * 2,
-    y: Math.random() * 40 + 20,
-  }); // End of randomStartPosition
 
   const moveDuck = (duck) => {
     let positionX = duck.startX || 0;
@@ -93,7 +79,11 @@ window.addEventListener('load', function () {
   }; // End of moveDuck
 
   const spawnDuck = () => {
-    const { x, y } = randomStartPosition();
+    const { x, y } = {
+      x: Math.random() * 2,
+      y: Math.random() * 40 + 20,
+    };
+
     const duckElement = document.createElement('img');
     duckElement.src = '../assets/images/flying-duck.gif';
     duckElement.alt = 'duck';
@@ -124,36 +114,6 @@ window.addEventListener('load', function () {
     initGame();
   }); // End of start-game event
 
-  const saveScore = (score) => {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const amPm = hours >= 12 ? 'PM' : 'AM';
-    const hours12 = hours % 12 || 12;
-
-    const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(
-      now.getMonth() + 1
-    ).padStart(2, '0')}/${now.getFullYear()} - ${String(hours12).padStart(
-      2,
-      '0'
-    )}:${String(minutes).padStart(2, '0')} ${amPm}`;
-
-    const storedScores = JSON.parse(
-      localStorage.getItem('duckGameScore') || '[]'
-    );
-
-    if (storedScores.some((entry) => entry.score === score)) return;
-
-    const gameScore = { score, date: formattedDate };
-    storedScores.push(gameScore);
-
-    const topScores = storedScores
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10);
-
-    localStorage.setItem('duckGameScore', JSON.stringify(topScores));
-  };
-
   gameScreen.addEventListener('click', (e) => {
     if (e.target.classList.contains('duck')) {
       if (gameStatus.isSoundOn) {
@@ -170,7 +130,7 @@ window.addEventListener('load', function () {
         emptyGunShotAudio.play();
       }
       gameStatus.tries--;
-      updateHearts();
+      updateHearts(gameStatus);
     } else {
       return;
     }
@@ -190,21 +150,17 @@ window.addEventListener('load', function () {
       }, 1000);
 
       if (gameStatus.totalScore > 0) {
-        saveScore(gameStatus.totalScore);
+        saveScore(gameStatus.totalScore, gameStatus.gameName);
       }
     }
   }); // End of gameScreen click event
 
   document.getElementById('openSound').addEventListener('click', () => {
-    gameStatus.isSoundOn = true;
-    document.getElementById('closeSound').classList.remove('hidden');
-    document.getElementById('openSound').classList.add('hidden');
+    openSound(gameStatus);
   }); // End of sound toggle
 
   document.getElementById('closeSound').addEventListener('click', () => {
-    gameStatus.isSoundOn = false;
-    document.getElementById('openSound').classList.remove('hidden');
-    document.getElementById('closeSound').classList.add('hidden');
+    closeSound(gameStatus);
   }); // End of sound toggle
 
   document.getElementById('exit-game').addEventListener('click', () => {
@@ -221,44 +177,9 @@ window.addEventListener('load', function () {
     initGame();
   }); // End of restart-game event
 
-  const updateTable = () => {
-    const storedScores = JSON.parse(
-      localStorage.getItem('duckGameScore') || '[]'
-    );
-
-    const table = document.getElementById('score-table');
-    const tbody = table.querySelector('tbody');
-    const clearButton = document.getElementById('clear-scores');
-    const noScoresMessage = document.getElementById('no-scores');
-
-    if (storedScores.length === 0) {
-      table.classList.add('hidden');
-      clearButton.classList.add('hidden');
-      noScoresMessage.classList.remove('hidden');
-      return;
-    }
-
-    storedScores.sort((a, b) => b.score - a.score);
-    tbody.innerHTML = '';
-
-    storedScores.forEach((score, index) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${score.score}</td>
-        <td>${score.date}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    table.classList.remove('hidden');
-    clearButton.classList.remove('hidden');
-    noScoresMessage.classList.add('hidden');
-  };
-
   document.getElementById('record').addEventListener('click', () => {
     document.getElementById('score-list').classList.remove('hidden');
-    updateTable();
+    updateTable(gameStatus.gameName);
   }); // End of record event
 
   document.getElementById('close-score-list').addEventListener('click', () => {
@@ -266,8 +187,8 @@ window.addEventListener('load', function () {
   }); // End of close score list event
 
   document.getElementById('clear-scores').addEventListener('click', () => {
-    localStorage.removeItem('duckGameScore');
-    updateTable();
+    localStorage.removeItem(gameStatus.gameName);
+    updateTable(gameStatus.gameName);
   });
 
   document.getElementById('back-home').addEventListener('click', () => {
@@ -276,56 +197,7 @@ window.addEventListener('load', function () {
     homeScreen.style.display = 'block';
   }); // End of back-home event
 
-  let keySequence = [];
-  document.addEventListener('keydown', function handleEasterEgg(e) {
-    keySequence.push(e.key.toLowerCase());
-    keySequence = keySequence.slice(-3);
-
-    if (keySequence.join('') === 'dog') {
-      gameStatus.tries = 9999;
-      updateHearts();
-
-      const easterEggAlert = document.createElement('div');
-      easterEggAlert.textContent = '🐶 Infinite tries activated! 🐶';
-      easterEggAlert.style.position = 'fixed';
-      easterEggAlert.style.top = '20px';
-      easterEggAlert.style.left = '50%';
-      easterEggAlert.style.transform = 'translateX(-50%)';
-      easterEggAlert.style.background = 'rgba(0,0,0,0.8)';
-      easterEggAlert.style.color = 'white';
-      easterEggAlert.style.padding = '10px';
-      easterEggAlert.style.borderRadius = '5px';
-      easterEggAlert.style.zIndex = '1000';
-
-      document.body.appendChild(easterEggAlert);
-
-      setTimeout(() => {
-        easterEggAlert.remove();
-      }, 3000);
-      keySequence = [];
-    }
-
-    if (keySequence.join('') === 'wak') {
-      gameStatus.sound = wakAudio;
-
-      const easterEggAlert = document.createElement('div');
-      easterEggAlert.textContent = '🐶 wak sound changed 🐶';
-      easterEggAlert.style.position = 'fixed';
-      easterEggAlert.style.top = '20px';
-      easterEggAlert.style.left = '50%';
-      easterEggAlert.style.transform = 'translateX(-50%)';
-      easterEggAlert.style.background = 'rgba(0,0,0,0.8)';
-      easterEggAlert.style.color = 'white';
-      easterEggAlert.style.padding = '10px';
-      easterEggAlert.style.borderRadius = '5px';
-      easterEggAlert.style.zIndex = '1000';
-
-      document.body.appendChild(easterEggAlert);
-
-      setTimeout(() => {
-        easterEggAlert.remove();
-      }, 3000);
-      keySequence = [];
-    }
+  document.addEventListener('keydown', (e) => {
+    handleEasterEgg(e, gameStatus);
   }); // End of Easter egg event
 }); // End of window load event

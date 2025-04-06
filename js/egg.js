@@ -4,7 +4,6 @@ window.addEventListener('load', () => {
   const gameScreen = document.querySelector('.game-screen');
   const gameOverScreen = document.querySelector('.game-over-screen');
   const score = document.querySelector('#score');
-  const remainingTries = document.querySelector('#remain-tries');
   const nest = document.querySelector('#nest');
   let targetX = nest.offsetLeft;
 
@@ -18,6 +17,7 @@ window.addEventListener('load', () => {
   levelUpAudio.load();
 
   let gameStatus = {
+    gameName: 'eggCollector',
     isStarted: false,
     isSoundOn: true,
     speedUp: true,
@@ -31,16 +31,6 @@ window.addEventListener('load', () => {
 
   let eggSPownIntervalId = null;
 
-  const updateHearts = () => {
-    remainingTries.innerText = '❤️'.repeat(
-      gameStatus.tries > 10 ? 10 : gameStatus.tries
-    );
-    if (gameStatus.tries >= 999) {
-      gameStatus.tries = 9999;
-      remainingTries.innerHTML = '<i class="fa-solid fa-infinity"></i>';
-    }
-  }; // End of updateHearts
-
   const initGame = () => {
     gameStatus.isStarted = true;
     gameStatus.tries = 5;
@@ -48,43 +38,8 @@ window.addEventListener('load', () => {
     gameStatus.eggSpeed = 5;
     gameStatus.eggInterval = 1000;
     gameStatus.nestSpeed = 30;
-    updateHearts();
+    updateHearts(gameStatus);
     score.innerText = gameStatus.totalScore;
-  };
-
-  const randomStartPosition = () => ({
-    x: Math.random() * 90,
-    y: 0,
-  });
-
-  const saveScore = (score) => {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const amPm = hours >= 12 ? 'PM' : 'AM';
-    const hours12 = hours % 12 || 12;
-
-    const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(
-      now.getMonth() + 1
-    ).padStart(2, '0')}/${now.getFullYear()} - ${String(hours12).padStart(
-      2,
-      '0'
-    )}:${String(minutes).padStart(2, '0')} ${amPm}`;
-
-    const storedScores = JSON.parse(
-      localStorage.getItem('eggGameScore') || '[]'
-    );
-
-    if (storedScores.some((entry) => entry.score === score)) return;
-
-    const gameScore = { score, date: formattedDate };
-    storedScores.push(gameScore);
-
-    const topScores = storedScores
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10);
-
-    localStorage.setItem('eggGameScore', JSON.stringify(topScores));
   };
 
   let activeEggs = [];
@@ -104,6 +59,11 @@ window.addEventListener('load', () => {
     crackedEggElement.style.bottom = `${0}px`;
     crackedEggElement.style.width = '50px';
     crackedEggElement.style.height = '50px';
+
+    // Ensure CSS position context
+    if (getComputedStyle(gameScreen).position !== 'relative') {
+      gameScreen.style.position = 'relative';
+    }
 
     gameScreen.appendChild(crackedEggElement);
 
@@ -125,7 +85,7 @@ window.addEventListener('load', () => {
     activeEggs.push(eggElement);
 
     eggElement.style.transition = `top ${gameStatus.eggSpeed}s linear`;
-    eggElement.style.top = '96%';
+    eggElement.style.top = '100%';
 
     eggElement.addEventListener('transitionend', () => {
       addCrackedEgg(eggElement);
@@ -146,7 +106,7 @@ window.addEventListener('load', () => {
           missAudio.currentTime = 0;
           missAudio.play();
         }
-        updateHearts();
+        updateHearts(gameStatus);
         gameScreen.removeChild(eggElement);
 
         if (gameStatus.tries <= 0) {
@@ -161,11 +121,11 @@ window.addEventListener('load', () => {
 
           // Update final score display
           document.getElementById('final-score').textContent =
-            'Your score: ' + gameStatus.totalScore;
+            gameStatus.totalScore;
 
           // Save to localStorage
           if (gameStatus.totalScore > 0) {
-            saveScore(gameStatus.totalScore);
+            saveScore(gameStatus.totalScore, gameStatus.gameName);
           }
         }
       }
@@ -176,7 +136,10 @@ window.addEventListener('load', () => {
   const spawnEgg = () => {
     if (!gameStatus.isStarted) return;
 
-    const { x, y } = randomStartPosition();
+    const { x, y } = {
+      x: Math.random() * 100,
+      y: 0,
+    };
     const eggElement = document.createElement('img');
     const randomIndex = Math.floor(Math.random() * 3) + 1;
 
@@ -313,15 +276,11 @@ window.addEventListener('load', () => {
   animate(); // Start animation loop
 
   document.getElementById('openSound').addEventListener('click', () => {
-    gameStatus.isSoundOn = true;
-    document.getElementById('closeSound').classList.remove('hidden');
-    document.getElementById('openSound').classList.add('hidden');
+    openSound(gameStatus);
   }); // End of sound toggle
 
   document.getElementById('closeSound').addEventListener('click', () => {
-    gameStatus.isSoundOn = false;
-    document.getElementById('openSound').classList.remove('hidden');
-    document.getElementById('closeSound').classList.add('hidden');
+    closeSound(gameStatus);
   }); // End of sound toggle
 
   document.getElementById('exit-game').addEventListener('click', () => {
@@ -341,44 +300,9 @@ window.addEventListener('load', () => {
     homeScreen.classList.remove('hidden');
   }); // End of back-home event
 
-  const updateTable = () => {
-    const storedScores = JSON.parse(
-      localStorage.getItem('eggGameScore') || '[]'
-    );
-
-    const table = document.getElementById('score-table');
-    const tbody = table.querySelector('tbody');
-    const clearButton = document.getElementById('clear-scores');
-    const noScoresMessage = document.getElementById('no-scores');
-
-    if (storedScores.length === 0) {
-      table.classList.add('hidden');
-      clearButton.classList.add('hidden');
-      noScoresMessage.classList.remove('hidden');
-      return;
-    }
-
-    storedScores.sort((a, b) => b.score - a.score);
-    tbody.innerHTML = '';
-
-    storedScores.forEach((score, index) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${score.score}</td>
-        <td>${score.date}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    table.classList.remove('hidden');
-    clearButton.classList.remove('hidden');
-    noScoresMessage.classList.add('hidden');
-  };
-
   document.getElementById('record').addEventListener('click', () => {
     document.getElementById('score-list').classList.remove('hidden');
-    updateTable();
+    updateTable(gameStatus.gameName);
   }); // End of record event
 
   document.getElementById('close-score-list').addEventListener('click', () => {
@@ -386,37 +310,11 @@ window.addEventListener('load', () => {
   }); // End of close score list event
 
   document.getElementById('clear-scores').addEventListener('click', () => {
-    localStorage.removeItem('eggGameScore');
-    updateTable();
+    localStorage.removeItem(gameStatus.gameName);
+    updateTable(gameStatus.gameName);
   });
 
-  let keySequence = [];
-  document.addEventListener('keydown', function handleEasterEgg(e) {
-    keySequence.push(e.key.toLowerCase());
-    keySequence = keySequence.slice(-3);
-
-    if (keySequence.join('') === 'dog') {
-      gameStatus.tries = 9999;
-      updateHearts();
-
-      const easterEggAlert = document.createElement('div');
-      easterEggAlert.textContent = '🐶 Infinite tries activated! 🐶';
-      easterEggAlert.style.position = 'fixed';
-      easterEggAlert.style.top = '20px';
-      easterEggAlert.style.left = '50%';
-      easterEggAlert.style.transform = 'translateX(-50%)';
-      easterEggAlert.style.background = 'rgba(0,0,0,0.8)';
-      easterEggAlert.style.color = 'white';
-      easterEggAlert.style.padding = '10px';
-      easterEggAlert.style.borderRadius = '5px';
-      easterEggAlert.style.zIndex = '1000';
-
-      document.body.appendChild(easterEggAlert);
-
-      setTimeout(() => {
-        easterEggAlert.remove();
-      }, 3000);
-      keySequence = [];
-    }
+  document.addEventListener('keydown', (e) => {
+    handleEasterEgg(e, gameStatus);
   }); // End of Easter egg event
 }); // window load event
