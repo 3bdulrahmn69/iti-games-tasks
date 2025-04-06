@@ -105,11 +105,6 @@ window.addEventListener('load', () => {
     crackedEggElement.style.width = '50px';
     crackedEggElement.style.height = '50px';
 
-    // Ensure CSS position context
-    if (getComputedStyle(gameScreen).position !== 'relative') {
-      gameScreen.style.position = 'relative';
-    }
-
     gameScreen.appendChild(crackedEggElement);
 
     // Add fade-out animation
@@ -130,7 +125,7 @@ window.addEventListener('load', () => {
     activeEggs.push(eggElement);
 
     eggElement.style.transition = `top ${gameStatus.eggSpeed}s linear`;
-    eggElement.style.top = '100%';
+    eggElement.style.top = '96%';
 
     eggElement.addEventListener('transitionend', () => {
       addCrackedEgg(eggElement);
