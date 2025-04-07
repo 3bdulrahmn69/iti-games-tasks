@@ -44,9 +44,8 @@ window.addEventListener('load', () => {
 
   let activeEggs = [];
 
-  const addCrackedEgg = (eggElement) => {
-    const eggX =
-      (gameScreen.offsetWidth * parseFloat(eggElement.style.left)) / 100;
+  const addCrackedEgg = (eggPosition) => {
+    const eggX = eggPosition;
 
     const crackedEggElement = document.createElement('img');
 
@@ -88,7 +87,7 @@ window.addEventListener('load', () => {
     eggElement.style.top = '100%';
 
     eggElement.addEventListener('transitionend', () => {
-      addCrackedEgg(eggElement);
+      addCrackedEgg(eggElement.offsetLeft);
 
       // Delay removal to ensure position calculation
       setTimeout(() => {
@@ -181,7 +180,13 @@ window.addEventListener('load', () => {
   document.addEventListener('mousemove', (e) => {
     gameStatus.isUsingKeyboard = false;
     if (!gameStatus.isUsingKeyboard) {
-      targetX = e.clientX - nest.offsetWidth / 2;
+      targetX = Math.max(
+        0,
+        Math.min(
+          e.clientX - nest.offsetWidth,
+          window.innerWidth - nest.offsetWidth
+        )
+      );
     }
   });
 

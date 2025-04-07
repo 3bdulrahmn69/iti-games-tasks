@@ -40,7 +40,6 @@ window.addEventListener('load', function () {
 
   const moveDuck = (duck) => {
     let positionX = duck.startX || 0;
-    let direction = 1;
 
     const fly = () => {
       if (!gameStatus.isStarted) return;
@@ -62,7 +61,7 @@ window.addEventListener('load', function () {
           : (gameStatus.speedUp = true);
       }
 
-      positionX += gameStatus.duckSpeed * direction;
+      positionX += gameStatus.duckSpeed;
       const verticalVariation = Math.sin(positionX / 10) * 5;
 
       duck.style.left = `${positionX}%`;
@@ -80,8 +79,8 @@ window.addEventListener('load', function () {
 
   const spawnDuck = () => {
     const { x, y } = {
-      x: Math.random() * 2,
-      y: Math.random() * 40 + 20,
+      x: -10,
+      y: Math.floor(Math.random() * 60) + 15, // Random Y position between 15% and 75%
     };
 
     const duckElement = document.createElement('img');
